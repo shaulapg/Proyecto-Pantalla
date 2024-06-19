@@ -1,0 +1,49 @@
+import cv2
+import pathlib
+
+# Lista de rutas a los archivos de vídeo
+base_path = str(pathlib.Path(__file__).parent.absolute()) + "/"
+
+video_paths = [
+    base_path + 'Video1.mp4',
+    base_path + 'Video2.mp4'
+#Y así la cant de videos que sean
+]
+
+poster_dimensions = (3840, int(2160*.98))
+
+while True:
+    for video_path in video_paths:
+
+        # Crear un objeto de captura de vídeo
+        cap = cv2.VideoCapture(video_path)
+
+        if not cap.isOpened():
+            print(f"Error al abrir el archivo de vídeo: {video_path}")
+            continue
+
+        # Leer y reproducir el vídeo cuadro por cuadro
+        while True:
+            ret, frame = cap.read()
+            if not ret:
+                break
+                
+            # Dimensiones de la pantalla
+            frame = cv2.resize(frame, poster_dimensions)
+
+            # Voltear el cuadro horizontalmente
+
+            # Mostrar el cuadro
+            cv2.imshow('Video', frame)
+
+            # Salir si se presiona la tecla 'q'
+            if cv2.waitKey(25) & 0xFF == ord('q'):
+                cap.release()
+                cv2.destroyAllWindows()
+                exit()  # Salir completamente del programa
+
+        # Liberar el objeto de captura
+        cap.release()
+
+# Cerrar todas las ventanas
+cv2.destroyAllWindows()
